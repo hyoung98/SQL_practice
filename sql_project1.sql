@@ -1,0 +1,139 @@
+/*전국의 지역별, 성별, 연령대별 인구수 구하기*/
+/*
+행정구역
+전체인구수
+연령별 인구수
+성별
+연령구간*/
+CREATE TABLE TB_TEMPER_DATA
+(
+    DISTRICT CHAR(21)
+,   TOTAL_P NUMBER(10,1)
+,   AGE_P NUMBER(10,1)
+,   GENDER CHAR(3)
+,   SECTION CHAR(15)
+);
+
+/*코드 작성하기*/
+SELECT COUNT(*) FROM TB_TEMPER;
+SELECT COUNT(*) FROM TB_TEMPER_DATA;
+
+/*테이블 만들기*/
+CREATE TABLE TB_TEMPER
+(
+    DISTRICT CHAR(21)
+,   TOTAL_P NUMBER(10,1)
+,   AGE_P NUMBER(10,1)
+,   GENDER CHAR(3)
+,   AGE_SECTION CHAR(15)
+);
+
+SELECT * FROM TB_TEMPER_DATA;
+
+/*데이터분석을 하기 위해서 테이블 데이터 복사본 만들기*/
+INSERT INTO TB_TEMPER
+	SELECT
+   	  DISTRICT
+ 	, TOTAL_P
+ 	, AGE_P
+ 	, GENDER
+ 	, SECTION
+	FROM TB_TEMPER_DATA;
+
+SELECT * FROM TB_TEMPER;
+SELECT COUNT(*) FROM TB_TEMPER; 
+
+
+COMMIT; 
+
+SELECT *
+FROM (TB_TEMPER);
+
+/*1*/
+/*지역별로 인구수 합계 구하기*/
+SELECT
+A.DISTRICT 
+, SUM(A.AGE_P) AS SUM_AGE_P
+FROM TB_TEMPER A
+GROUP BY A.DISTRICT 
+;
+
+/*2*/
+/*내림차순으로 확인하기*/
+SELECT
+A.DISTRICT 
+, SUM(A.AGE_P) AS SUM_AGE_P
+FROM TB_TEMPER A
+GROUP BY A.DISTRICT 
+ORDER BY SUM_AGE_P DESC
+;
+/* 인구수많은 지역 순서
+경기도->울산->부산->경상남도->인천->경상북도->대구->충청남도->전라남도->전라북도->충청북도->강원도->대전->광주->울산->제주->세종*/
+
+/*2-1*/
+/*연령대별 인구수 평균*/
+SELECT
+A.AGE_SECTION
+, ROUND(AVG(A.AGE_P),2) AS SUM_AGE_P
+FROM TB_TEMPER A
+GROUP BY A.AGE_SECTION
+ORDER BY SUM_AGE_P DESC
+;
+
+/*3*/
+/*성별로 지역별 인구수 확인하기*/
+SELECT
+A.DISTRICT ,A.GENDER 
+, SUM(A.AGE_P) AS SUM_AGE_P
+FROM TB_TEMPER A
+GROUP BY A.DISTRICT, A.GENDER 
+ORDER BY A.GENDER,SUM_AGE_P DESC
+;
+
+/*3-3*/
+SELECT
+A.GENDER 
+, SUM(A.AGE_P) AS SUM_AGE_P
+FROM TB_TEMPER A
+WHERE A.GENDER IN ('남','여')
+GROUP BY A.GENDER
+ORDER BY SUM_AGE_P DESC
+;
+/*
+ 여 : 51479294
+ 남 : 51144608 */
+
+
+/*4*/
+SELECT
+A.AGE_SECTION
+, SUM(A.AGE_P) AS SUM_AGE_P
+FROM TB_TEMPER A
+GROUP BY A.AGE_SECTION
+ORDER BY SUM_AGE_P DESC
+;
+
+/*50대 -> 40대 -> 60대 -> 30대 -> 20대 -> 10대 -> 10대미만 -> 70대 -> 80대 -> 90대 -> 100대 이상*/
+/*50대의 인구수가 가장 많다는 것을 알 수 있다.*/
+
+/*5 연령별 더 많은 성별 인구수*/
+SELECT
+A.AGE_SECTION,A.GENDER 
+, SUM(A.AGE_P) AS SUM_AGE_P
+FROM TB_TEMPER A
+GROUP BY A.AGE_SECTION,A.GENDER 
+ORDER BY A.AGE_SECTION,SUM_AGE_P DESC
+;
+
+/*연령별 더 많은 성별 인구수
+ * 10대미만 = 남
+ * 10대 = 남
+ * 20대 = 남
+ * 30대 = 남
+ * 40대 = 남
+ * 50대 = 남
+ * 60대 = 여
+ * 70대 = 여
+ * 80대 = 여
+ * 90대 = 여
+ * 100대이상 = 여 */
