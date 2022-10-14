@@ -7,4 +7,4 @@
 
 | Tolls & Language | file | Description |
 | ------ | ------ | ------ |
-| <img src="https://img.shields.io/badge/Oracle-F80000?style=flat-square&logo=Oracle&logoColor=white"/></a> | sql_project1.sql | 202201 인구현황 |
+| <img src="https://img.shields.io/badge/Oracle-F80000?style=flat-square&logo=Oracle&logoColor=white"/></a> & sqldeveloper | sql_project1.sql | 202201 인구현황 |
